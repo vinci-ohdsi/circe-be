@@ -75,6 +75,7 @@ public class Checker implements Check {
         checks.add(new DomainTypeCheck());
         checks.add(new CriteriaContradictionsCheck());
         checks.add(new DeathTimeWindowCheck());
+	checks.add(new NestedVisitOccurrenceCheck()); 
         return checks;
     }
 
