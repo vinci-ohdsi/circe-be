@@ -30,6 +30,7 @@ import org.ohdsi.circe.cohortdefinition.builders.BuilderOptions;
  */
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = As.WRAPPER_OBJECT)
 @JsonSubTypes({
+  @JsonSubTypes.Type(value = CareSite.class, name = "CareSite"),  
   @JsonSubTypes.Type(value = ConditionEra.class, name = "ConditionEra"),
   @JsonSubTypes.Type(value = ConditionOccurrence.class, name = "ConditionOccurrence"),
   @JsonSubTypes.Type(value = Death.class, name = "Death"),

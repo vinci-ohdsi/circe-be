@@ -21,6 +21,7 @@ END Note!!!!
 <#elseif c.class.simpleName == "DrugEra"><@DrugEra c=c level=level isPlural=isPlural countCriteria=countCriteria indexLabel=indexLabel />
 <#elseif c.class.simpleName == "DrugExposure"><@DrugExposure c=c level=level isPlural=isPlural countCriteria=countCriteria indexLabel=indexLabel />
 <#elseif c.class.simpleName == "LocationRegion"><@LocationRegion c=c level=level isPlural=isPlural countCriteria=countCriteria indexLabel=indexLabel />
+<#elseif c.class.simpleName == "CareSite"><@CareSite c=c level=level isPlural=isPlural countCriteria=countCriteria indexLabel=indexLabel />
 <#elseif c.class.simpleName == "Measurement"><@Measurement c=c level=level isPlural=isPlural countCriteria=countCriteria indexLabel=indexLabel />
 <#elseif c.class.simpleName == "Observation"><@Observation c=c level=level isPlural=isPlural countCriteria=countCriteria indexLabel=indexLabel />
 <#elseif c.class.simpleName == "ObservationPeriod"><@ObservationPeriod c=c level=level isPlural=isPlural countCriteria=countCriteria indexLabel=indexLabel />
@@ -145,6 +146,12 @@ c.CorrelatedCriteria??>; <@Group group=c.CorrelatedCriteria level=level indexLab
 <#local temp><@EventDateCriteria c.startDate!{} c.endDate!{} /></#local><#if temp?has_content><#local attrs+=[temp]></#if>
 location of ${utils.codesetName(c.codesetId!"", "any location")}<#if attrs?size gt 0>, ${attrs?join("; ")}</#if><#if 
 c.CorrelatedCriteria??>; <@Group group=c.CorrelatedCriteria level=level indexLabel=utils.codesetName(c.codesetId!"", "any location") /><#else>.</#if></#macro>
+
+<#macro CareSite c level isPlural=true countCriteria={} indexLabel="cohort entry"><#local attrs = []><#local attrs = []><#if countCriteria?has_content>
+<#local temp><@WindowCriteria countCriteria=countCriteria indexLabel=indexLabel/></#local><#if temp?has_content><#local attrs+=[temp]></#if></#if>
+<#local temp><@EventDateCriteria c.startDate!{} c.endDate!{} /></#local><#if temp?has_content><#local attrs+=[temp]></#if>
+location of ${utils.codesetName(c.codesetId!"", "any care site")}<#if attrs?size gt 0>, ${attrs?join("; ")}</#if><#if 
+c.CorrelatedCriteria??>; <@Group group=c.CorrelatedCriteria level=level indexLabel=utils.codesetName(c.codesetId!"", "any care site") /><#else>.</#if></#macro>
 
 <#macro Measurement c level isPlural=true countCriteria={} indexLabel="cohort entry"><#local attrs = []><#local attrs = []><#if countCriteria?has_content>
 <#local temp><@WindowCriteria countCriteria=countCriteria indexLabel=indexLabel/></#local><#if temp?has_content><#local attrs+=[temp]></#if></#if>

@@ -185,6 +185,12 @@ public class RangeCheckerFactory extends BaseCheckerFactory {
                 checkRange(region.endDate, Constants.Criteria.LOCATION_REGION, Constants.Attributes.LOCATION_REGION_START_DATE_ATTR);
                 checkRange(region.startDate, Constants.Criteria.LOCATION_REGION, Constants.Attributes.LOCATION_REGION_END_DATE_ATTR);
             };
+        } else if (criteria instanceof CareSite) {
+            result = c -> {
+                CareSite region = (CareSite) c;
+                checkRange(region.endDate, Constants.Criteria.CARE_SITE, Constants.Attributes.CARE_SITE_START_DATE_ATTR);
+                checkRange(region.startDate, Constants.Criteria.CARE_SITE, Constants.Attributes.CARE_SITE_END_DATE_ATTR);
+            };
         }
         return result;
     }

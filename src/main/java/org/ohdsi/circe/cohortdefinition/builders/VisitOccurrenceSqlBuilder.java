@@ -121,7 +121,7 @@ public class VisitOccurrenceSqlBuilder<T extends VisitOccurrence> extends Criter
       criteria.placeOfServiceCS != null ||
       criteria.placeOfServiceLocation != null
     ) {
-      joinClauses.add("JOIN @cdm_database_schema.CARE_SITE CS on C.care_site_id = CS.care_site_id");
+      joinClauses.add("JOIN @cdm_database_schema.CARE_SITE CS on C.care_site_concept_id = CS.care_site_concept_id");
     }
     if ((criteria.providerSpecialty != null && criteria.providerSpecialty.length > 0) ||
       criteria.providerSpecialtyCS != null
@@ -130,7 +130,7 @@ public class VisitOccurrenceSqlBuilder<T extends VisitOccurrence> extends Criter
     }
 
     if (criteria.placeOfServiceLocation != null) {
-      addFilteringByCareSiteLocationRegion(joinClauses, criteria.placeOfServiceLocation);
+      addFilteringByCareSiteLocation(joinClauses, criteria.placeOfServiceLocation);
     }
 
     return joinClauses;
@@ -205,26 +205,18 @@ public class VisitOccurrenceSqlBuilder<T extends VisitOccurrence> extends Criter
     return whereClauses;
   }
 
-  protected void addFilteringByCareSiteLocationRegion(List<String> joinClauses, Integer codesetId) {
+  protected void addFilteringByCareSiteLocation(List<String> joinClauses, Integer codesetId) {
 
-    joinClauses.add(getLocationHistoryJoin("LH", "CARE_SITE", "C.care_site_id"));
-    joinClauses.add("JOIN @cdm_database_schema.LOCATION LOC on LOC.location_id = LH.location_id");
-    joinClauses.add(
-            BuilderUtils.getCodesetJoinExpression(
-                    codesetId,
-                    "LOC.region_concept_id",
-                    null,
-                    null
-            )
-    );
+    joinClauses.add(getCareSiteHistoryJoin("CS", "C.care_site_concept_id")); /*Alias CS is coming from the join to care site in the calling function resolveJoinClauses */
+    joinClauses.add("JOIN @cdm_database_schema.LOCATION LOC on LOC.location_id = CSTE.location_id");
+
   }
 
-  protected String getLocationHistoryJoin(String alias, String domain, String entityIdField) {
+  protected String getCareSiteHistoryJoin(String alias, String careSiteConceptId) {
 
-    return "JOIN @cdm_database_schema.LOCATION_HISTORY " + alias + " "
-            + "on " + alias + ".entity_id = " + entityIdField + " "
-            + "AND " + alias + ".domain_id = '" + domain + "' "
-            + "AND C.visit_start_date >= " + alias + ".start_date "
-            + "AND C.visit_end_date <= ISNULL(" + alias + ".end_date, DATEFROMPARTS(2099,12,31))";
+    return "JOIN @cdm_database_schema.CARE_SITE_HISTORY on CARE_SITE_HISTORY.care_site_concept_id = " + alias + "." + careSiteConceptId + " "
+            + "AND C.visit_start_date >= CARE_SITE_HISTORY.start_date "
+            + "AND C.visit_end_date <= CARE_SITE_HISTORY.end_date  "
+      ;
   }
 }
