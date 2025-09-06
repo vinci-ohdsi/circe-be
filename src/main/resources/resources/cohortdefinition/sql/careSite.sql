@@ -1,6 +1,6 @@
--- Begin Care Site (via Care_Site_History) Criteria
+-- Begin Care Site Criteria
 select
-  C.care_site_concept_id
+  C.care_site_concept_id,
   C.person_id,
   C.care_site_history_id as event_id,
   C.start_date as start_date,
