@@ -66,10 +66,10 @@
   "cdm.care_site": [
     {
       "care_site_id": 1,
-      "place_of_service_concept_id": 1
+      "care_site_concept_id": 1
     },{
       "care_site_id": 2,
-      "place_of_service_concept_id": 2
+      "care_site_concept_id": 2
     }
   ],
   "visit_detail_codeset_criteria.cohort" : [
