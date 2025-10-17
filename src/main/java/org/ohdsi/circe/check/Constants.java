@@ -38,6 +38,7 @@ public interface Constants {
         String PAYER_PLAN_PERIOD = "payer plan period";
         String OBSERVATION_PERIOD = "observation period";
         String LOCATION_REGION = "location region";
+        String CARE_SITE = "care site";
         String DEMOGRAPHIC = "demographic";
     }
 
@@ -99,6 +100,8 @@ public interface Constants {
         String DISCHARGED_TO_ATTR = "discharged to";
         String LOCATION_REGION_START_DATE_ATTR = "location region start date";
         String LOCATION_REGION_END_DATE_ATTR = "location region end date";
+        String CARE_SITE_START_DATE_ATTR = "care site start date";
+        String CARE_SITE_END_DATE_ATTR = "care site end date";
         String STOP_REASON_ATTR = "stop reason";
         String UNIQUE_DEVICE_ID_ATTR = "unique device id";
         String LOT_NUMBER_ATTR = "lot number";

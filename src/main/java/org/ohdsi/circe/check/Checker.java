@@ -35,6 +35,7 @@ import org.ohdsi.circe.check.checkers.ExitCriteriaCheck;
 import org.ohdsi.circe.check.checkers.ExitCriteriaDaysOffsetCheck;
 import org.ohdsi.circe.check.checkers.IncompleteRuleCheck;
 import org.ohdsi.circe.check.checkers.InitialEventCheck;
+import org.ohdsi.circe.check.checkers.NestedVisitOccurrenceCheck;
 import org.ohdsi.circe.check.checkers.NoExitCriteriaCheck;
 import org.ohdsi.circe.check.checkers.OcurrenceCheck;
 import org.ohdsi.circe.check.checkers.RangeCheck;
@@ -75,6 +76,7 @@ public class Checker implements Check {
         checks.add(new DomainTypeCheck());
         checks.add(new CriteriaContradictionsCheck());
         checks.add(new DeathTimeWindowCheck());
+	checks.add(new NestedVisitOccurrenceCheck()); 
         return checks;
     }
 

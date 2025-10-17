@@ -1,7 +1,7 @@
 package org.ohdsi.circe.cohortdefinition.builders;
 
 import org.apache.commons.lang3.StringUtils;
-import org.ohdsi.circe.cohortdefinition.LocationRegion;
+import org.ohdsi.circe.cohortdefinition.CareSite;
 import org.ohdsi.circe.helper.ResourceHelper;
 
 import java.util.ArrayList;
@@ -12,9 +12,9 @@ import java.util.Set;
 
 import static org.ohdsi.circe.cohortdefinition.builders.BuilderUtils.getCodesetJoinExpression;
 
-public class LocationRegionSqlBuilder<T extends LocationRegion> extends CriteriaSqlBuilder<T> {
+public class CareSiteSqlBuilder<T extends CareSite> extends CriteriaSqlBuilder<T> {
 
-  private final static String LOCATION_REGION_TEMPLATE = ResourceHelper.GetResourceAsString("/resources/cohortdefinition/sql/locationRegion.sql");
+  private final static String CARE_SITE_TEMPLATE = ResourceHelper.GetResourceAsString("/resources/cohortdefinition/sql/careSite.sql");
 
   // default columns are those that are specified in the template, and dont' need to be added if specifeid in 'additionalColumns'
   private final Set<CriteriaColumn> DEFAULT_COLUMNS = new HashSet<>(Arrays.asList(CriteriaColumn.START_DATE, CriteriaColumn.END_DATE, CriteriaColumn.VISIT_ID));
@@ -26,16 +26,16 @@ public class LocationRegionSqlBuilder<T extends LocationRegion> extends Criteria
 
   @Override
   protected String getQueryTemplate() {
-    return LOCATION_REGION_TEMPLATE;
+    return CARE_SITE_TEMPLATE;
   }
 
   @Override
   protected String getTableColumnForCriteriaColumn(CriteriaColumn column) {
     switch (column) {
       case DOMAIN_CONCEPT:
-        return "C.region_concept_id";
+        return "C.care_site_concept_id";
       default:
-        throw new IllegalArgumentException("Invalid CriteriaColumn for Location Region:" + column.toString());
+        throw new IllegalArgumentException("Invalid CriteriaColumn for Care Site:" + column.toString());
     }
   }
 
@@ -44,7 +44,7 @@ public class LocationRegionSqlBuilder<T extends LocationRegion> extends Criteria
 
     return StringUtils.replace(query, "@codesetClause",
             getCodesetJoinExpression(criteria.codesetId,
-                    "lh.location_event_id",
+                    "csh.care_site_concept_id",
                     null,
                     null)
     );

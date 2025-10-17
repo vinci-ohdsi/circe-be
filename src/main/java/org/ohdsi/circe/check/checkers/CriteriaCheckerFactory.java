@@ -19,9 +19,7 @@
 package org.ohdsi.circe.check.checkers;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 import java.util.function.Function;
 import java.util.function.Supplier;
@@ -72,6 +70,8 @@ class CriteriaCheckerFactory {
             result = c -> Objects.equals(((VisitDetail) c).codesetId, conceptSet.id) || checkConceptSetSelection(c);
         } else if (criteria instanceof LocationRegion) {
             result = c -> Objects.equals(((LocationRegion) c).codesetId, conceptSet.id);
+        } else if (criteria instanceof CareSite) {
+            result = c -> Objects.equals(((CareSite) c).codesetId, conceptSet.id);
         }
         return result;
     }

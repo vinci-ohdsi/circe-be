@@ -162,7 +162,7 @@ public class VisitDetailSqlBuilder<T extends VisitDetail> extends CriteriaSqlBui
 
     // placeOfService
     if (criteria.placeOfServiceCS != null) {
-      addWhereClause(whereClauses, criteria.placeOfServiceCS, "CS.place_of_service_concept_id");
+      addWhereClause(whereClauses, criteria.placeOfServiceCS, "CS.care_site_concept_id");
     }
 
     return whereClauses;
