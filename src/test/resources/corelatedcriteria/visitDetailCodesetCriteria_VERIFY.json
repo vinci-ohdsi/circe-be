@@ -25,5 +25,18 @@
       "person_id":2,
       "event_id":1
     }
+  ],"visit_detail_codeset_criteria.pos_in_codeset": [
+    {
+      "index_id":0,
+      "person_id":1,
+      "event_id":1
+    }
+  ],
+  "visit_detail_codeset_criteria.pos_not_in_codeset": [
+    {
+      "index_id":0,
+      "person_id":2,
+      "event_id":1
+    }
   ]
 }

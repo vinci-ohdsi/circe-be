@@ -57,19 +57,21 @@
   "cdm.provider": [
     {
       "provider_id": 1,
-      "specialty_concept_id": 1
+      "specialty_concept_id": 2
     },{
       "provider_id": 2,
-      "specialty_concept_id": 2
+      "specialty_concept_id": 5
     }
   ],
   "cdm.care_site": [
     {
       "care_site_id": 1,
-      "care_site_concept_id": 1
+      "care_site_concept_id": 1,
+      "place_of_service_concept_id": 10
     },{
       "care_site_id": 2,
-      "care_site_concept_id": 2
+      "care_site_concept_id": 2,
+      "place_of_service_concept_id": 15
     }
   ],
   "visit_detail_codeset_criteria.cohort" : [
@@ -107,6 +109,14 @@
     {
       "codeset_id": 2,
       "concept_id": 6
+    },
+    {
+      "codeset_id": 3,
+      "concept_id": 10
+    },
+    {
+      "codeset_id": 3,
+      "concept_id": 11
     }
   ]
 }

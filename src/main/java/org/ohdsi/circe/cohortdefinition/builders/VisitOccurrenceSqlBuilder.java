@@ -121,7 +121,7 @@ public class VisitOccurrenceSqlBuilder<T extends VisitOccurrence> extends Criter
       criteria.placeOfServiceCS != null ||
       criteria.placeOfServiceLocation != null
     ) {
-      joinClauses.add("JOIN @cdm_database_schema.CARE_SITE CS on C.care_site_concept_id = CS.care_site_concept_id");
+      joinClauses.add("JOIN @cdm_database_schema.CARE_SITE CS on C.place_of_service_concept_id = CS.place_of_service_concept_id");
     }
     if ((criteria.providerSpecialty != null && criteria.providerSpecialty.length > 0) ||
       criteria.providerSpecialtyCS != null

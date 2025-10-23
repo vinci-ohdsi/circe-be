@@ -5,6 +5,9 @@
  */
 package org.ohdsi.circe.cohortdefinition.builders;
 
+import java.io.FileWriter;
+import java.io.IOException;
+
 import com.github.mjeanroy.dbunit.core.dataset.DataSetFactory;
 import org.dbunit.Assertion;
 import org.dbunit.database.IDatabaseConnection;
@@ -66,11 +69,9 @@ public class CorelatedCriteria_5_9_0_Test extends AbstractDatabaseTest {
     
     // Concept set selection criteria
     ConceptSetSelection inCsSelection = new ConceptSetSelection();
-    inCsSelection.codesetId = 1;
     inCsSelection.isExclusion = false;
     
     ConceptSetSelection notInCsSelection = new ConceptSetSelection();
-    notInCsSelection.codesetId = 1;
     notInCsSelection.isExclusion = true;
     
     // VisitDetail criteria
@@ -84,9 +85,11 @@ public class CorelatedCriteria_5_9_0_Test extends AbstractDatabaseTest {
     cc.occurrence = CriteriaUtils.getAtExactly1Occurrence();
     cg.criteriaList = new CorelatedCriteria[] { cc };
 
-    // Query 1: exactly 1 occurrence where gener concept in codeset 1
+    // Query 1: exactly 1 occurrence where gender concept in codeset 1
+    inCsSelection.codesetId = 1;    // codeset_id 1 is used for gender
     visitDetail.genderCS = inCsSelection;
 
+    
     // translate to PG
     String inGenderQuery = queryBuilder.getCriteriaGroupQuery(cg, eventTable);
     inGenderQuery = inGenderQuery.replace("#Codesets", RESULTS_SCHEMA + ".codesets");
@@ -101,6 +104,7 @@ public class CorelatedCriteria_5_9_0_Test extends AbstractDatabaseTest {
     Assertion.assertEquals(expectedInGender, actualInGender);
 
     //Query 2: exaclty 1 occurrence where gender concept not in codeset 1
+    notInCsSelection.codesetId = 1; // codeset_id 1 is used for gender
     visitDetail.genderCS = notInCsSelection;
     
     // translate to PG
@@ -116,8 +120,9 @@ public class CorelatedCriteria_5_9_0_Test extends AbstractDatabaseTest {
     final ITable expectedNotInGender = expectedDataSet.getTable(RESULTS_SCHEMA + ".gender_not_in_codeset");
     Assertion.assertEquals(expectedNotInGender, actualNotInGender);
 
-    // Query 3: exaclty 1 occurrence where provider concept in codeset 1
+    // Query 3: exactly 1 occurrence where provider concept in codeset 
     visitDetail.genderCS = null;
+    inCsSelection.codesetId = 2;    // codeset_id 2 is used for provider specialty type
     visitDetail.providerSpecialtyCS = inCsSelection;
     
     // translate to PG
@@ -126,14 +131,16 @@ public class CorelatedCriteria_5_9_0_Test extends AbstractDatabaseTest {
     String translatedInProviderQuery = SqlRender.renderSql(SqlTranslate.translateSql(inProviderQuery, "postgresql"),
             new String[] {"cdm_database_schema", "indexId"}, 
             new String[] {"cdm", "0"});
+    log.info(translatedInProviderQuery);
     
     // Validate results
     // perform inclusion query
     final ITable actualInProvider = dbUnitCon.createQueryTable(RESULTS_SCHEMA + ".provider_in_codeset", translatedInProviderQuery);
-    final ITable expectedInProvider = expectedDataSet.getTable(RESULTS_SCHEMA + ".provider_in_codeset");
+    final ITable expectedInProvider = expectedDataSet.getTable(RESULTS_SCHEMA + ".provider_in_codeset"); 
     Assertion.assertEquals(expectedInProvider, actualInProvider);
     
-    // Query 4: exaclty 1 occurrence where provider concept not in codeset 1
+    // Query 4: exactly 1 occurrence where provider concept not in codeset 
+    notInCsSelection.codesetId = 2; // codeset_id 2 is used for provider specialty concept
     visitDetail.providerSpecialtyCS = notInCsSelection;
     
     // translate to PG
@@ -149,8 +156,9 @@ public class CorelatedCriteria_5_9_0_Test extends AbstractDatabaseTest {
     final ITable expectedNotInProvider = expectedDataSet.getTable(RESULTS_SCHEMA + ".provider_not_in_codeset");
     Assertion.assertEquals(expectedNotInProvider, actualNotInProvider);
     
-    // Query 5: exaclty 1 occurrence where place of service concept in codeset 1
+    // Query 5: exactly 1 occurrence where place of service concept in codeset 3
     visitDetail.providerSpecialtyCS = null;
+    inCsSelection.codesetId = 3;    // codeset_id 3 is used for place_of_service_concept_id
     visitDetail.placeOfServiceCS = inCsSelection;
     
     // translate to PG
@@ -159,14 +167,16 @@ public class CorelatedCriteria_5_9_0_Test extends AbstractDatabaseTest {
     String translatedInPlaceOfServiceQuery = SqlRender.renderSql(SqlTranslate.translateSql(inPlaceOfServiceQuery, "postgresql"),
             new String[] {"cdm_database_schema", "indexId"}, 
             new String[] {"cdm", "0"});
+    log.info(translatedInPlaceOfServiceQuery);
     
     // Validate results
     // perform inclusion query
-    final ITable actualInPlaceOfService = dbUnitCon.createQueryTable(RESULTS_SCHEMA + ".provider_in_codeset", translatedInPlaceOfServiceQuery);
-    final ITable expectedInPlaceOfService = expectedDataSet.getTable(RESULTS_SCHEMA + ".provider_in_codeset");
+    final ITable actualInPlaceOfService = dbUnitCon.createQueryTable(RESULTS_SCHEMA + ".pos_in_codeset", translatedInPlaceOfServiceQuery);
+    final ITable expectedInPlaceOfService = expectedDataSet.getTable(RESULTS_SCHEMA + ".pos_in_codeset");
     Assertion.assertEquals(expectedInPlaceOfService, actualInPlaceOfService);
     
-    // Query 6: exaclty 1 occurrence where place of service not in codeset 1
+    // Query 6: exaclty 1 occurrence where place of service not in codeset 3
+    notInCsSelection.codesetId = 3; // codeset_id 3 is used for place_of_service_concept_id
     visitDetail.placeOfServiceCS = notInCsSelection;
     
     // translate to PG
@@ -175,11 +185,12 @@ public class CorelatedCriteria_5_9_0_Test extends AbstractDatabaseTest {
     String translatedNotInPlaceOfServiceQuery = SqlRender.renderSql(SqlTranslate.translateSql(notInPlaceOfServiceQuery, "postgresql"),
             new String[] {"cdm_database_schema", "indexId"}, 
             new String[] {"cdm", "0"});
-    
+    log.info(translatedNotInPlaceOfServiceQuery);
+
     // Validate results
     // perform inclusion query
-    final ITable actualNotInPlaceOfService = dbUnitCon.createQueryTable(RESULTS_SCHEMA + ".provider_not_in_codeset", translatedNotInPlaceOfServiceQuery);
-    final ITable expectedNotInPlaceOfService = expectedDataSet.getTable(RESULTS_SCHEMA + ".provider_not_in_codeset");
+    final ITable actualNotInPlaceOfService = dbUnitCon.createQueryTable(RESULTS_SCHEMA + ".pos_not_in_codeset", translatedNotInPlaceOfServiceQuery);
+    final ITable expectedNotInPlaceOfService = expectedDataSet.getTable(RESULTS_SCHEMA + ".pos_not_in_codeset");
     Assertion.assertEquals(expectedNotInPlaceOfService, actualNotInPlaceOfService);
   }
 
