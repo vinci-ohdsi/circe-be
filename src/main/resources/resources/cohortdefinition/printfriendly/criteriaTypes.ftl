@@ -266,7 +266,8 @@ c.visitType??><#local temp>a visit type that<#if c.visitTypeExclude!false> is no
 c.visitTypeCS??><#local temp>a visit type concept <@inputTypes.ConceptSetSelection selection=c.visitTypeCS /> concept set</#local><#local attrs+=[temp]></#if><#if
 c.providerSpecialty??><#local temp>a provider specialty that is: <@inputTypes.ConceptList list=c.providerSpecialty/></#local><#local attrs+=[temp]></#if><#if 
 c.providerSpecialtyCS??><#local temp>a provider speciality concept <@inputTypes.ConceptSetSelection selection=c.providerSpecialtyCS /> concept set</#local><#local attrs+=[temp]></#if><#if
-c.placeOfServiceCS??><#local temp>a place of service that is <@inputTypes.ConceptSetSelection selection=c.placeOfServiceCS /> concept set</#local><#local attrs+=[temp]></#if><#if 
+c.placeOfServiceCS??><#local temp>a place of service that is <@inputTypes.ConceptSetSelection selection=c.placeOfServiceCS /> concept set</#local><#local attrs+=[temp]></#if><#if
+c.placeOfServiceLocationCS??><#local temp>a place of service location that is <@inputTypes.ConceptSetSelection selection=c.placeOfServiceLocationCS /> concept set</#local><#local attrs+=[temp]></#if><#if 
 c.visitLength??><#local temp>with length <@inputTypes.NumericRange range=c.visitLength /> days</#local><#local attrs+=[temp]></#if>
 visit occurrence<#if isPlural && !(c.first!false)>s</#if> of ${utils.codesetName(c.codesetId!"", "any visit")}<#if 
 c.visitSourceConcept??> (including ${utils.codesetName(c.visitSourceConcept, "any visit")} source concepts)</#if><#if 
@@ -280,7 +281,8 @@ c.CorrelatedCriteria??>; <@Group group=c.CorrelatedCriteria level=level indexLab
 <#local temp><@EventDateCriteria c.visitDetailStartDate!{} c.visitDetailEndDate!{} /></#local><#if temp?has_content><#local attrs+=[temp]></#if><#if
 c.visitDetailTypeCS?? && c.visitDetailTypeCS.codesetId??><#local temp>a visit detail type that is <@inputTypes.ConceptSetSelection selection=c.visitDetailTypeCS /> concept set</#local><#local attrs+=[temp]></#if><#if
 c.providerSpecialtyCS?? && c.providerSpecialtyCS.codesetId??><#local temp>a provider specialty that is <@inputTypes.ConceptSetSelection selection=c.providerSpecialtyCS /> concept set</#local><#local attrs+=[temp]></#if><#if
-c.placeOfServiceCS??><#local temp>a place of service that is <@inputTypes.ConceptSetSelection selection=c.placeOfServiceCS /> concept set</#local><#local attrs+=[temp]></#if><#if
+c.placeOfServiceCS??><#local temp>a place of service that is <@inputTypes.ConceptSetSelection selection=c.placeOfServiceCS /> concept set</#local><#local attrs+=[temp]></#if>><#if
+c.placeOfServiceLocationCS??><#local temp>a place of service location that is <@inputTypes.ConceptSetSelection selection=c.placeOfServiceLocationCS /> concept set</#local><#local attrs+=[temp]></#if><#if
 c.visitDetailLength??><#local temp>with length <@inputTypes.NumericRange range=c.visitDetailLength /> days</#local><#local attrs+=[temp]></#if>
 visit detail<#if isPlural && !(c.first!false)>s</#if> of ${utils.codesetName(c.codesetId!"", "any visit detail")}<#if
 c.visitDetailSourceConcept??> (including ${utils.codesetName(c.visitDetailSourceConcept, "any visit")} source concepts)</#if><#if

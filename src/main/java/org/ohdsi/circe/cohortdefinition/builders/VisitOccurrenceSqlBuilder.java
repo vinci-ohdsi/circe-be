@@ -20,7 +20,7 @@ public class VisitOccurrenceSqlBuilder<T extends VisitOccurrence> extends Criter
   private final Set<CriteriaColumn> DEFAULT_COLUMNS = new HashSet<>(Arrays.asList(CriteriaColumn.START_DATE, CriteriaColumn.END_DATE, CriteriaColumn.VISIT_ID));
 
   // default select columns are the columns that will always be returned from the subquery, but are added to based on the specific criteria
-  private final List<String> DEFAULT_SELECT_COLUMNS = new ArrayList<>(Arrays.asList("vo.person_id", "vo.visit_occurrence_id", "vo.visit_concept_id"));
+  private final List<String> DEFAULT_SELECT_COLUMNS = new ArrayList<>(Arrays.asList("vo.person_id", "vo.visit_occurrence_id", "vo.visit_concept_id","vo.care_site_id"));
 
   @Override
   protected Set<CriteriaColumn> getDefaultColumns() {
@@ -87,11 +87,11 @@ public class VisitOccurrenceSqlBuilder<T extends VisitOccurrence> extends Criter
     }
 
     // placeOfService
-    if ((criteria.placeOfService != null && criteria.placeOfService.length > 0) ||
-      criteria.placeOfServiceCS != null
-    ) {
-      selectCols.add("vo.care_site_id");
-    }
+    // if ((criteria.placeOfService != null && criteria.placeOfService.length > 0) ||
+    //   criteria.placeOfServiceCS != null
+    // ) {
+    //   selectCols.add("vo.care_site_id");
+    // }
 
     // dateAdjustment or default start/end dates
     if (criteria.dateAdjustment != null) {
@@ -117,20 +117,28 @@ public class VisitOccurrenceSqlBuilder<T extends VisitOccurrence> extends Criter
     {
       joinClauses.add("JOIN @cdm_database_schema.PERSON P on C.person_id = P.person_id");
     }
+    
     if ((criteria.placeOfService != null && criteria.placeOfService.length > 0) ||
-      criteria.placeOfServiceCS != null ||
-      criteria.placeOfServiceLocation != null
+      criteria.placeOfServiceCS != null || criteria.placeOfServiceLocationCS != null
     ) {
-      joinClauses.add("JOIN @cdm_database_schema.CARE_SITE CS on C.place_of_service_concept_id = CS.place_of_service_concept_id");
+      joinClauses.add("JOIN @cdm_database_schema.CARE_SITE CS on C.care_site_id = CS.care_site_id");
     }
+    
     if ((criteria.providerSpecialty != null && criteria.providerSpecialty.length > 0) ||
       criteria.providerSpecialtyCS != null
     ) {
       joinClauses.add("LEFT JOIN @cdm_database_schema.PROVIDER PR on C.provider_id = PR.provider_id");
     }
 
-    if (criteria.placeOfServiceLocation != null) {
-      addFilteringByCareSiteLocation(joinClauses, criteria.placeOfServiceLocation);
+    if (criteria.placeOfServiceLocationCS != null) {
+
+      String joinString = "JOIN @cdm_database_schema.CARE_SITE_HISTORY CSH" + " " 
+            + "on CSH.person_id = C.person_id" +  " "
+	    + "AND CSH.care_site_concept_id = CS.care_site_concept_id" +  " "
+            + "AND C.start_date >= CSH.start_date" +  " "
+            + "AND C.end_date <= ISNULL(CSH.end_date, DATEFROMPARTS(2099,12,31))";
+
+	joinClauses.add(joinString);
     }
 
     return joinClauses;
@@ -202,21 +210,12 @@ public class VisitOccurrenceSqlBuilder<T extends VisitOccurrence> extends Criter
       whereClauses.add(getCodesetInExpression("CS.place_of_service_concept_id", criteria.placeOfServiceCS));
     }
 
+    // placeOfServiceLocationCS
+    if (criteria.placeOfServiceLocationCS != null) {
+      whereClauses.add(getCodesetInExpression("CS.care_site_concept_id", criteria.placeOfServiceLocationCS));
+    }
+
     return whereClauses;
   }
 
-  protected void addFilteringByCareSiteLocation(List<String> joinClauses, Integer codesetId) {
-
-    joinClauses.add(getCareSiteHistoryJoin("CS", "C.care_site_concept_id")); /*Alias CS is coming from the join to care site in the calling function resolveJoinClauses */
-    joinClauses.add("JOIN @cdm_database_schema.LOCATION LOC on LOC.location_id = CSTE.location_id");
-
-  }
-
-  protected String getCareSiteHistoryJoin(String alias, String careSiteConceptId) {
-
-    return "JOIN @cdm_database_schema.CARE_SITE_HISTORY on CARE_SITE_HISTORY.care_site_concept_id = " + alias + "." + careSiteConceptId + " "
-            + "AND C.visit_start_date >= CARE_SITE_HISTORY.start_date "
-            + "AND C.visit_end_date <= CARE_SITE_HISTORY.end_date  "
-      ;
-  }
 }

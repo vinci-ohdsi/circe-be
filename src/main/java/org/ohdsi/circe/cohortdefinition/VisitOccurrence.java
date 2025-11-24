@@ -79,12 +79,11 @@ public class VisitOccurrence extends Criteria {
 
   /**
    * ID of Codeset which defines Geo concepts.
-   * The care site's location.region_concept_id should match one of those.
+   * The care site's care_site_concept_id should match one of those.
    */
-
   @CdmVersion(range = ">=6.1")
-  @JsonProperty("PlaceOfServiceLocation")
-  public Integer placeOfServiceLocation;
+  @JsonProperty("PlaceOfServiceLocationCS")
+  public ConceptSetSelection placeOfServiceLocationCS;
   
   @Override
   public String accept(IGetCriteriaSqlDispatcher dispatcher, BuilderOptions options)

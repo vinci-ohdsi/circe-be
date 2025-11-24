@@ -80,8 +80,8 @@ public class VisitDetailSqlBuilder<T extends VisitDetail> extends CriteriaSqlBui
       selectCols.add("vd.provider_id");
     }
 
-    // placeOfService
-    if (criteria.placeOfServiceCS != null) {
+    // placeOfService and placeOfServiceLocation 
+    if (criteria.placeOfServiceCS != null || criteria.placeOfServiceLocationCS != null) {
       selectCols.add("vd.care_site_id");
     }
 
@@ -106,17 +106,24 @@ public class VisitDetailSqlBuilder<T extends VisitDetail> extends CriteriaSqlBui
     {
       joinClauses.add("JOIN @cdm_database_schema.PERSON P on C.person_id = P.person_id");
     }
-    if (criteria.placeOfServiceCS != null || criteria.placeOfServiceLocation != null) {
+    if (criteria.placeOfServiceCS != null || criteria.placeOfServiceLocationCS != null) {
       joinClauses.add("JOIN @cdm_database_schema.CARE_SITE CS on C.care_site_id = CS.care_site_id");
     }
     if (criteria.providerSpecialtyCS != null) {
       joinClauses.add("LEFT JOIN @cdm_database_schema.PROVIDER PR on C.provider_id = PR.provider_id");
     }
 
-    if (criteria.placeOfServiceLocation != null) {
-      addFilteringByCareSiteLocationRegion(joinClauses, criteria.placeOfServiceLocation);
-    }
+    if (criteria.placeOfServiceLocationCS != null) {
 
+	String joinString = "JOIN @cdm_database_schema.CARE_SITE_HISTORY CSH" + " " 
+            + "on CSH.person_id = C.person_id" +  " "
+	    + "AND CSH.care_site_concept_id = CS.care_site_concept_id" +  " "
+            + "AND C.start_date >= CSH.start_date" +  " "
+            + "AND C.end_date <= ISNULL(CSH.end_date, DATEFROMPARTS(2099,12,31))";
+
+	joinClauses.add(joinString);
+    }
+    	
     return joinClauses;
   }
 
@@ -165,15 +172,14 @@ public class VisitDetailSqlBuilder<T extends VisitDetail> extends CriteriaSqlBui
       addWhereClause(whereClauses, criteria.placeOfServiceCS, "CS.place_of_service_concept_id");
     }
 
+    // placeOfServiceLocation
+    if (criteria.placeOfServiceLocationCS != null) {
+      addWhereClause(whereClauses, criteria.placeOfServiceLocationCS, "CS.care_site_concept_id");
+    }
+
     return whereClauses;
   }
 
-  protected void addFilteringByCareSiteLocationRegion(List<String> joinClauses, Integer codesetId) {
-
-    joinClauses.add(getLocationHistoryJoin("LH", "CARE_SITE", "C.care_site_id"));
-    joinClauses.add("JOIN @cdm_database_schema.LOCATION LOC on LOC.location_id = LH.location_id");
-    addFiltering(joinClauses, codesetId, "LOC.region_concept_id");
-  }
 
   private void addWhereClause(List<String> whereClauses, ConceptSetSelection conceptSetSelection, String conceptColumn) {
     whereClauses.add(getCodesetInExpression(conceptColumn, conceptSetSelection));
@@ -190,12 +196,4 @@ public class VisitDetailSqlBuilder<T extends VisitDetail> extends CriteriaSqlBui
     );
   }
 
-  protected String getLocationHistoryJoin(String alias, String domain, String entityIdField) {
-
-    return "JOIN @cdm_database_schema.LOCATION_HISTORY " + alias + " "
-            + "on " + alias + ".entity_id = " + entityIdField + " "
-            + "AND " + alias + ".domain_id = '" + domain + "' "
-            + "AND C.visit_detail_start_date >= " + alias + ".start_date "
-            + "AND C.visit_detail_end_date <= ISNULL(" + alias + ".end_date, DATEFROMPARTS(2099,12,31))";
-  }
 }
