@@ -53,7 +53,7 @@ public class AttributeCheckerFactory extends BaseCheckerFactory{
                     criteria.race,
                     criteria.ethnicity,
                     criteria.occurrenceStartDate,
-                    criteria.occurrenceEndDate);
+		    criteria.occurrenceEndDate);
         };
         return result;
     }

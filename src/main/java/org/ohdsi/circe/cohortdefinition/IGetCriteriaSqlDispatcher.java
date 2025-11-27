@@ -25,8 +25,8 @@ import org.ohdsi.circe.cohortdefinition.builders.BuilderOptions;
  * @author cknoll1
  */
 public interface IGetCriteriaSqlDispatcher {
-  String getCriteriaSql(CareSite locationRegion, BuilderOptions options);
-  String getCriteriaSql(LocationRegion locationRegion, BuilderOptions options);
+  String getCriteriaSql(CareSite careSiteCriteria, BuilderOptions options);
+  String getCriteriaSql(LocationRegion locationRegionCriteria, BuilderOptions options);
   String getCriteriaSql(ConditionEra conditionEraCriteria, BuilderOptions options);
   String getCriteriaSql(ConditionOccurrence conditionOccurrenceCriteria, BuilderOptions options);
   String getCriteriaSql(Death deathCriteria, BuilderOptions options);

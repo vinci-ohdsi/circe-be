@@ -69,13 +69,13 @@ public class CareSiteSqlBuilder<T extends CareSite> extends CriteriaSqlBuilder<T
     List<String> whereClauses = super.resolveWhereClauses(criteria);
     
     // startDate
-    if (criteria.startDate != null) {
-      whereClauses.add(buildDateRangeClause("C.start_date", criteria.startDate));
+    if (criteria.occurrenceStartDate != null) {
+      whereClauses.add(buildDateRangeClause("C.start_date", criteria.occurrenceStartDate));
     }
 
     // endDate
-    if (criteria.endDate != null) {
-      whereClauses.add(buildDateRangeClause("C.end_date", criteria.endDate));
+    if (criteria.occurrenceEndDate != null) {
+      whereClauses.add(buildDateRangeClause("C.end_date", criteria.occurrenceEndDate));
     }
 
     return whereClauses;    

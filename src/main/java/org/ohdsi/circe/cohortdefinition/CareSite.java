@@ -6,17 +6,17 @@ import org.ohdsi.analysis.versioning.CdmVersion;
 import org.ohdsi.circe.cohortdefinition.builders.BuilderOptions;
 
 @JsonTypeName("CareSite")
-@CdmVersion(range = ">=6.1")
+@CdmVersion(range = ">=5.1")
 public class CareSite extends GeoCriteria {
 
     @JsonProperty("CodesetId")
     public Integer codesetId;
 
-    @JsonProperty("StartDate")
-    public DateRange startDate;
+    @JsonProperty("OccurrenceStartDate")
+    public DateRange occurrenceStartDate;
 
-    @JsonProperty("EndDate")
-    public DateRange endDate;
+    @JsonProperty("OccurrenceEndDate")
+    public DateRange occurrenceEndDate;
 
   
     @Override

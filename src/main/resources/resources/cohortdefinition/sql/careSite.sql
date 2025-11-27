@@ -1,8 +1,7 @@
 -- Begin Care Site Criteria
-select
-  C.care_site_concept_id,
+select  
   C.person_id,
-  C.care_site_history_id as event_id,
+  C.care_site_concept_id as event_id,
   C.start_date as start_date,
   ISNULL(C.end_date, DATEFROMPARTS(2099,12,31)) as end_date,
   CAST(NULL as bigint) as visit_occurrence_id,
