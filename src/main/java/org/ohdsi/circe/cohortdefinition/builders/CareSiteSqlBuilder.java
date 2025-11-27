@@ -10,6 +10,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import static org.ohdsi.circe.cohortdefinition.builders.BuilderUtils.buildDateRangeClause;
 import static org.ohdsi.circe.cohortdefinition.builders.BuilderUtils.getCodesetJoinExpression;
 
 public class CareSiteSqlBuilder<T extends CareSite> extends CriteriaSqlBuilder<T> {
@@ -65,6 +66,18 @@ public class CareSiteSqlBuilder<T extends CareSite> extends CriteriaSqlBuilder<T
   @Override
   protected List<String> resolveWhereClauses(T criteria) {
 
-    return new ArrayList<>();
+    List<String> whereClauses = super.resolveWhereClauses(criteria);
+    
+    // startDate
+    if (criteria.startDate != null) {
+      whereClauses.add(buildDateRangeClause("C.start_date", criteria.startDate));
+    }
+
+    // endDate
+    if (criteria.endDate != null) {
+      whereClauses.add(buildDateRangeClause("C.end_date", criteria.endDate));
+    }
+
+    return whereClauses;    
   }
 }

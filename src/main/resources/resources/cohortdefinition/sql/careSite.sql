@@ -17,4 +17,5 @@ from
   FROM @cdm_database_schema.CARE_SITE_HISTORY csh
     @codesetClause
 ) C
+@whereClause
 -- End Care Site Criteria

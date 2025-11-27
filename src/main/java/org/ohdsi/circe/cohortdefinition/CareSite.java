@@ -12,6 +12,13 @@ public class CareSite extends GeoCriteria {
     @JsonProperty("CodesetId")
     public Integer codesetId;
 
+    @JsonProperty("StartDate")
+    public DateRange startDate;
+
+    @JsonProperty("EndDate")
+    public DateRange endDate;
+
+  
     @Override
     public String accept(IGetCriteriaSqlDispatcher dispatcher, BuilderOptions options)
     {

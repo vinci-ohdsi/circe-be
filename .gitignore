@@ -7,3 +7,4 @@ target
 /.settings
 /nbactions.xml
 /nb-configuration.xml
+Makefile
