@@ -10,11 +10,12 @@ from
 (
  select  csh.care_site_concept_id,
          csh.care_site_history_id,
-	 csh.person_id,
+	 csh.entity_id person_id,
 	 csh.start_date,
 	 csh.end_date
-  FROM @cdm_database_schema.CARE_SITE_HISTORY csh
+  from @cdm_database_schema.CARE_SITE_HISTORY csh
     @codesetClause
+  where csh.entity_field_id = 1147026 
 ) C
 @whereClause
 -- End Care Site Criteria

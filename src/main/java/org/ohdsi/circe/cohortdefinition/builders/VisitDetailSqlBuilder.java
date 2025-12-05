@@ -115,8 +115,9 @@ public class VisitDetailSqlBuilder<T extends VisitDetail> extends CriteriaSqlBui
 
     if (criteria.placeOfServiceLocationCS != null) {
 
-	String joinString = "JOIN @cdm_database_schema.CARE_SITE_HISTORY CSH" + " " 
-            + "on CSH.person_id = C.person_id" +  " "
+	String joinString = "JOIN @cdm_database_schema.CARE_SITE_HISTORY CSH" + " "
+	    + "on CSH.entity_id = C.person_id" +  " "
+	    + "AND CSH.entity_field_id = 1147026" + " "
 	    + "AND CSH.care_site_concept_id = CS.care_site_concept_id" +  " "
             + "AND C.start_date >= CSH.start_date" +  " "
             + "AND C.end_date <= ISNULL(CSH.end_date, DATEFROMPARTS(2099,12,31))";
